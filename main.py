@@ -5,7 +5,6 @@ from cogs.err_handler import *
 from cogs.greetings import *
 from cogs.dynamic_channels import *
 
-# https://discord.com/api/oauth2/authorize?client_id=552528712986263562&permissions=8&scope=bot
 
 def main():
     load_dotenv()
