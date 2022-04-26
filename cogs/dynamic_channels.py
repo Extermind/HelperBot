@@ -36,9 +36,10 @@ class DynamicChannels(commands.Cog, name="Dynamic Channels Module"):
         category = await guild.create_category(group_name)
         await category.edit(overwrites=overwrites)
         # create channels
-        await guild.create_text_channel(f"{group_name}-text", category=category, sync_permissions=True)
-        await guild.create_voice_channel(f"{group_name}-vc", category=category, sync_permissions=True)
-
+        text_channel = await guild.create_text_channel(f"{group_name}-text", category=category)
+        await text_channel.edit(sync_permissions=True)
+        voice_channel = await guild.create_voice_channel(f"{group_name}-vc", category=category)
+        await  voice_channel.edit(sync_permissions=True)
         # create simple data base for the active dynamic channel
         jsonObj = {
             "userID": ctx.author.id,
