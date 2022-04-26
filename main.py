@@ -1,5 +1,8 @@
 import os
 from dotenv import load_dotenv
+
+import utils.utils
+from utils import *
 from clients.bot_client import *
 from cogs.err_handler import *
 from cogs.greetings import *
@@ -13,14 +16,12 @@ def main():
     prefix = "."
     intents = discord.Intents.all()
 
-    bot = BotClient(command_prefix=prefix, intents=intents)
+    bot = BotClient(command_prefix=prefix, intents=intents,help_command=None)
 
-    # Error handler class
-    bot.add_cog(ErrHandler(bot))
-    # Greetings class
-    bot.add_cog(Greetings(bot))
-    # dynamic channels
-    bot.add_cog(DynamicChannels(bot))
+
+    for filename in os.listdir('./cogs'):
+        if filename.endswith('.py'):
+            bot.load_extension(f'cogs.{filename[:-3]}')
 
     bot.run(token)
 

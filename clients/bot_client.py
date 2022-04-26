@@ -4,7 +4,7 @@ from utils.utils import create_dir_if_not_exist
 
 class BotClient(commands.Bot):
     async def on_ready(self):
-        print(f'{self.user.name} has connected do Discord!')
+        print(f'{self.user.name} has connected do Discord!\n\nLoading Cogs: ')
 
         #check for folder where data is stored
         create_dir_if_not_exist('guilds')
@@ -20,6 +20,4 @@ class BotClient(commands.Bot):
                    You can use the `.help` command to get started!
                    """, color=0xd89522)
             await general.send(embed=embed)
-#
-
 

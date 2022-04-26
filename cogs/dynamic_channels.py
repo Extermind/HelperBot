@@ -10,7 +10,11 @@ class DynamicChannels(commands.Cog, name="Dynamic Channels Module"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(name="create_dynamic_channels", aliases=["create_channels"])
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(f'{self.__class__.__name__} Cog has been loaded.')
+
+    @commands.command(name="create_dynamic_channels", aliases=["create_channels"], description='Creates new dynamic channel group and role for you and your friend')
     async def create_dynamic_channel_group(self, ctx, group_name):
         guild = ctx.guild
         path = f"guilds/{guild.id}/{ctx.author.id}"
@@ -53,7 +57,7 @@ class DynamicChannels(commands.Cog, name="Dynamic Channels Module"):
         json.dump(jsonObj, f)
         f.close()
 
-    @commands.command(name="delete_dynamic_channels")
+    @commands.command(name="delete_dynamic_channels", description='Deletes your dynamic channel')
     async def delete_dynamic_channel_group(self, ctx):
         guild = ctx.guild
         path = f"guilds/{guild.id}/{ctx.author.id}/dynamicChannelData.json"
@@ -73,7 +77,7 @@ class DynamicChannels(commands.Cog, name="Dynamic Channels Module"):
                     await user.remove_roles(role)
             await role.delete()
 
-    @commands.command(name="add_friend_to_channel_group")
+    @commands.command(name="add_friend_to_channel_group", description='Adds your friends to your group by username')
     async def add_friend_to_channel_group(self, ctx, friend_name):
         guild = ctx.guild
         path = f"guilds/{guild.id}/{ctx.author.id}/dynamicChannelData.json"
@@ -102,7 +106,7 @@ class DynamicChannels(commands.Cog, name="Dynamic Channels Module"):
         await friend.add_roles(role)
         await ctx.channel.send(f"user: `{friend.name}` was added to the group")
 
-    @commands.command(name="remove_friend_from_channel_group")
+    @commands.command(name="remove_friend_from_channel_group", description="Removes your friend from group by name")
     async def remove_friend_from_channel_group(self, ctx, friend_name):
         guild = ctx.guild
         path = f"guilds/{guild.id}/{ctx.author.id}/dynamicChannelData.json"
@@ -130,3 +134,7 @@ class DynamicChannels(commands.Cog, name="Dynamic Channels Module"):
         if role in friend.roles:
             await friend.remove_roles(role)
             await ctx.channel.send(f"user: `{friend.name}` was removed from group")
+
+
+def setup(bot):
+    bot.add_cog(DynamicChannels(bot))
