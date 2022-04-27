@@ -23,11 +23,11 @@ class CustomHelp(commands.Cog, name="Custom Help Module"):
         # helpEmbed.set_thumbnail(url=ctx.me.avatar_url)
 
         cogs = [c for c in self.bot.cogs.keys()]
-        # i do not have Events class yet soo
+        # I do not have Events class yet soo
         #cogs.remove('events')
-        # but i Do have err  handling module that has 0 commands so i can remove it
+        # but I Do have err handling module that has 0 commands, so I have to remove it
         cogs.remove('Error Handling Module')
-        print(cogs)
+        cogs.remove('Testing Module')
 
         cogsPerPage = 2
         totalPages = math.ceil(len(cogs) / cogsPerPage)
@@ -35,7 +35,7 @@ class CustomHelp(commands.Cog, name="Custom Help Module"):
         page = int(page)
         if page > totalPages or page < 1:
             await ctx.send(f'Invalid page numebr: {page}')
-
+            return
         helpEmbed.set_footer(
             text=f'{page}/{totalPages} Pages'
         )

@@ -1,13 +1,7 @@
 import os
+
 from dotenv import load_dotenv
-
-import utils.utils
-from utils import *
 from clients.bot_client import *
-from cogs.err_handler import *
-from cogs.greetings import *
-from cogs.dynamic_channels import *
-
 
 def main():
     load_dotenv()
@@ -17,6 +11,9 @@ def main():
     intents = discord.Intents.all()
 
     bot = BotClient(command_prefix=prefix, intents=intents,help_command=None)
+#    DiscordComponents(bot)
+
+    #bot = ComponentsBot(command_prefix="your prefix",help_command=None)
 
 
     for filename in os.listdir('./cogs'):

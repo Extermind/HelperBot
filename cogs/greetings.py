@@ -1,6 +1,8 @@
+import asyncio
+
 import discord
 from discord.ext import commands
-from discord.ui import Button, View
+
 
 class Greetings(commands.Cog, name='Greetings Module'):
     def __init__(self, bot):
@@ -22,23 +24,9 @@ class Greetings(commands.Cog, name='Greetings Module'):
 
 
 
-    # @commands.command(name="hlep")
-    # async def helpComm(self, ctx):
-    #     button1 = Button(label="“Click me!", style=discord.ButtonStyle.green)
-    #
-    #     button3 = Button(label="Danger", style=discord.ButtonStyle.danger)
-    #
-    #     async def button_callback(interaction):
-    #         await interaction.response.send_message("Henloo QwQ")
-    #
-    #     button1.callback = button_callback
-    #
-    #
-    #
-    #     view = View()
-    #     view.add_item(button1)
-    #     view.add_item(button3)
-    #     await ctx.send(view=view)
+
+
+
 
 def setup(bot):
     bot.add_cog(Greetings(bot))
