@@ -6,6 +6,8 @@ from discord import Colour
 from discord.ext import commands
 from discord.ui import Button, View
 
+from views.help_view import HelpView
+
 
 class CustomHelp(commands.Cog, name="Custom Help Module"):
     def __init__(self, bot):
@@ -34,7 +36,7 @@ class CustomHelp(commands.Cog, name="Custom Help Module"):
 
         page = int(page)
         if page > totalPages or page < 1:
-            await ctx.send(f'Invalid page numebr: {page}')
+            await ctx.send(f'Invalid page number: {page}')
             return
         helpEmbed.set_footer(
             text=f'{page}/{totalPages} Pages'
@@ -59,8 +61,8 @@ class CustomHelp(commands.Cog, name="Custom Help Module"):
             commandList += "\n"
 
             helpEmbed.add_field(name=cog, value=commandList, inline=False)
-
-        await ctx.channel.send(embed=helpEmbed)
+        view = HelpView(ctx,page,totalPages)
+        await ctx.channel.send(embed=helpEmbed, view=view)
 
 
 def setup(bot):
