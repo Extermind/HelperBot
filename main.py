@@ -11,10 +11,6 @@ def main():
     intents = discord.Intents.all()
 
     bot = BotClient(command_prefix=prefix, intents=intents,help_command=None)
-#    DiscordComponents(bot)
-
-    #bot = ComponentsBot(command_prefix="your prefix",help_command=None)
-
 
     for filename in os.listdir('./cogs'):
         if filename.endswith('.py'):
