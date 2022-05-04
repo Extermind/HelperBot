@@ -30,16 +30,20 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
 
         await reference.resolved.reply("Noticed",mention_author=False)
 
+        reference_id = reference.cached_message.id
+        reference_content = reference.cached_message.content
+
         timestamp = datetime.timestamp(datetime.now())
         jsonObj = {
             "serverID": ctx.guild.id,
             "serverName": ctx.guild.name,
-            # "channelID": ctx.channel.id,
-            # "channelName": ctx.channel.name,
-            "messageID": reference.cached_message.id,
-            "message": reference.cached_message.content,
+            "channelID": ctx.message.channel.id,
+            "channelName": ctx.message.channel.name,
+            "messageID": reference_id,              # I tried to do it like reference.cached_message.id but it raise an error on None idk why
+            "message": reference_content,           # same as above ant it's only because the channelID and channelName
             "creationTimeStamp": timestamp,
         }
+        print(jsonObj)
 
 # add show saved messages command
 #   this command shows in private conversations with bot
