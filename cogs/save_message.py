@@ -1,4 +1,5 @@
 import json
+import os
 from datetime import datetime
 
 import discord
@@ -27,20 +28,34 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
         path = f"guilds/{ctx.guild.id}/{ctx.message.author.id}"
         utils.utils.create_dir_if_not_exist(path)
 
-        await reference.resolved.reply("Noticed")
+        await reference.resolved.reply("Noticed",mention_author=False)
+
+        readObj = []
+
+        #check if file exists if not create one
+        path = f"{path}/saved_msg.json"
+        if not os.path.isfile(path):
+            with open(path,"w") as f:
+                f.close()
+        else: # file exists
+            # read file
+            with open(path,"r") as f:
+                readObj = json.load(f)
 
         timestamp = datetime.timestamp(datetime.now())
         jsonObj = {
-            "serverName": ctx.guild.name,
             "serverID": ctx.guild.id,
-            "message": reference.cached_message.content,
+            "serverName": ctx.guild.name,
+            # "channelID": ctx.channel.id,
+            # "channelName": ctx.channel.name,
             "messageID": reference.cached_message.id,
+            "message": reference.cached_message.content,
             "creationTimeStamp": timestamp,
         }
+        readObj.append(jsonObj)
 
-        f = open(f"{path}/saved_msg.json", "a")
-        json.dump(jsonObj, f)
-        f.close()
+        with open(path, "w+") as f:
+            json.dump(jsonObj, f)
 
 # add show saved messages command
 #   this command shows in private conversations with bot
