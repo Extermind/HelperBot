@@ -30,18 +30,6 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
 
         await reference.resolved.reply("Noticed",mention_author=False)
 
-        readObj = []
-
-        #check if file exists if not create one
-        path = f"{path}/saved_msg.json"
-        if not os.path.isfile(path):
-            with open(path,"w") as f:
-                f.close()
-        else: # file exists
-            # read file
-            with open(path,"r") as f:
-                readObj = json.load(f)
-
         timestamp = datetime.timestamp(datetime.now())
         jsonObj = {
             "serverID": ctx.guild.id,
@@ -52,10 +40,6 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
             "message": reference.cached_message.content,
             "creationTimeStamp": timestamp,
         }
-        readObj.append(jsonObj)
-
-        with open(path, "w+") as f:
-            json.dump(jsonObj, f)
 
 # add show saved messages command
 #   this command shows in private conversations with bot

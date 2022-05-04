@@ -14,7 +14,7 @@ class Testing(commands.Cog, name='Testing Module'):
         print(f'{self.__class__.__name__} Cog has been loaded.')
 
 
-    @commands.command(name="test")
+    @commands.command(name="hlep")
     async def helpComm(self, ctx,number=1):
         self.pageNumber=number
         view = help_view.HelpView(ctx,self)
