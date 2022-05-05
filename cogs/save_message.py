@@ -8,7 +8,9 @@ from discord import Button
 from discord.ui import Button, View
 
 import utils.utils
+from Embeds.saved_messages_embed import SavedMessagesEmbed
 from views import help_view
+
 
 class SaveMessage(commands.Cog, name='Save Message Module'):
     def __init__(self, bot):
@@ -19,19 +21,23 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
     async def on_ready(self):
         print(f'{self.__class__.__name__} Cog has been loaded.')
 
-
-    @commands.command(name="save_message", aliases=["save_msg","smsg"], description='Saves replied message')
+    @commands.command(name="save_message", aliases=["save_msg", "smsg"], description='Saves replied message')
     async def save_message(self, ctx):
         reference = ctx.message.reference
         if reference is None:
             return await ctx.reply("You did not reply to any message")
-        path = f"guilds/{ctx.guild.id}/{ctx.message.author.id}"
-        utils.utils.create_dir_if_not_exist(path)
 
-        await reference.resolved.reply("Noticed",mention_author=False)
+        # await reference.resolved.reply("Noticed",mention_author=False)
 
-        reference_id = reference.cached_message.id
-        reference_content = reference.cached_message.content
+        fetch_message = await ctx.fetch_message(reference.message_id)
+        # need to check if this message is a photo or a film
+        if (len(fetch_message.attachments) > 0):
+            att = {}
+            i = 0
+            for a in fetch_message.attachments:
+                att.update({i: a.url})
+                i+=1
+
 
         timestamp = datetime.timestamp(datetime.now())
         jsonObj = {
@@ -39,17 +45,15 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
             "serverName": ctx.guild.name,
             "channelID": ctx.message.channel.id,
             "channelName": ctx.message.channel.name,
-            "messageID": reference_id,              # I tried to do it like reference.cached_message.id but it raise an error on None idk why
-            "message": reference_content,           # same as above ant it's only because the channelID and channelName
+            "messageID": reference.message_id,
+            "message": fetch_message.content,
             "creationTimeStamp": timestamp,
         }
-        print(jsonObj)
-
-# add show saved messages command
-#   this command shows in private conversations with bot
-#   all of that server/user saved messages and also have
-#   a navigation buttons for example 5 messages per embed
-#   or custom number per embed
+        # print(jsonObj)
+        embed = SavedMessagesEmbed(jsonObj)
+        # print(embed)
+        # print(ctx.author)
+        await ctx.author.send(embed=embed)
 
 
 def setup(bot):
