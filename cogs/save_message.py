@@ -8,7 +8,7 @@ from discord import Button
 from discord.ui import Button, View
 
 import utils.utils
-from Embeds.saved_messages_embed import SavedMessagesEmbed
+from Embeds.saved_messages_embed import SavedMessagesEmbed, SavedMessagesImageEmbed
 from views import help_view
 
 
@@ -30,30 +30,46 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
         # await reference.resolved.reply("Noticed",mention_author=False)
 
         fetch_message = await ctx.fetch_message(reference.message_id)
+        att = {}
+        photo_embs = []
         # need to check if this message is a photo or a film
         if (len(fetch_message.attachments) > 0):
-            att = {}
             i = 0
             for a in fetch_message.attachments:
                 att.update({i: a.url})
+                if a.url.endswith('.png') or a.url.endswith('.jpg') or a.url.endswith('.gif'):
+                    photo_embs.append(SavedMessagesImageEmbed(a.url))
                 i+=1
 
 
+
         timestamp = datetime.timestamp(datetime.now())
+
+        if fetch_message.content == '':
+            fmsg = "none"
+        else:
+            fmsg = fetch_message.content
+
         jsonObj = {
             "serverID": ctx.guild.id,
             "serverName": ctx.guild.name,
             "channelID": ctx.message.channel.id,
             "channelName": ctx.message.channel.name,
             "messageID": reference.message_id,
-            "message": fetch_message.content,
+            "message": fmsg,
+            "attachments": att,
             "creationTimeStamp": timestamp,
         }
-        # print(jsonObj)
-        embed = SavedMessagesEmbed(jsonObj)
-        # print(embed)
+        print(jsonObj)
+
+        embedtxt = SavedMessagesEmbed(jsonObj)
+        embeds = [embedtxt]
+        embeds.extend(photo_embs)
+        #print(embeds)
         # print(ctx.author)
-        await ctx.author.send(embed=embed)
+        for e in embeds:
+            await ctx.author.send(embed=e)
+        #await ctx.author.send(embed=embed)
 
 
 def setup(bot):
