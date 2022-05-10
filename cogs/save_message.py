@@ -44,7 +44,7 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
             except IndexError:
                 i_film = 0
             finally:
-                data_from_attachments = self.attachments(fetch_message.attachments, i_img, i_film)
+                data_from_attachments = self.attachments(fetch_message.attachments,color,i_img, i_film)
                 # print("attachments:")
                 # print(data_from_attachments)
 
@@ -78,8 +78,19 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
                 }
                 # print(jsonObj)
                 embeds.insert(0, SavedMessagesEmbed(jsonObj,color))
-                await self.send_embeds(embeds, ctx.author)
-            
+                try:
+                    await self.send_embeds(embeds, ctx.author)
+                except discord.errors.Forbidden:
+                    await ctx.reply("Your DMs are turned off.\nRMC on server icon -> Privacy Settings -> Allow direct messages from server members.")
+
+
+
+    # this works only for commandError not http need to try except :)
+    # @save_message.error
+    # async def save_message_error(self,ctx,error):
+    #     if isinstance(error, discord.errors.Forbidden):
+    #         await ctx.channel.send('Turn on your DMs b-baka QwQ')
+
 
     def message_links(self, message: str, color: int) -> tuple:
         # check if message content has jpg,png,gif and creates list of embed
@@ -95,7 +106,7 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
             i_film = 0
             for url_t in urls:
                 url = f'{url_t[0]}://{url_t[1]}{url_t[2]}'
-                temp = url.split('http')  # check for ex: "https://www.google.comhttps://www.bing.com"
+                temp = url.split('http')  # check for ex: "https://www.google.comhttps://www.bing.com" 
                 temp.pop(0)
                 for t in temp:
                     if utils.check_if_url_is_film(t):
