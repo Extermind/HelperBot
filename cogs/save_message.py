@@ -106,7 +106,7 @@ class SaveMessage(commands.Cog, name='Save Message Module'):
             i_film = 0
             for url_t in urls:
                 url = f'{url_t[0]}://{url_t[1]}{url_t[2]}'
-                temp = url.split('http')  # check for ex: "https://www.google.comhttps://www.bing.com" 
+                temp = url.split('http')  # check for ex: "https://www.google.comhttps://www.bing.com"
                 temp.pop(0)
                 for t in temp:
                     if utils.check_if_url_is_film(t):
